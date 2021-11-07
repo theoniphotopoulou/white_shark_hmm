@@ -7,12 +7,6 @@ The data are read in and cleaned in script "01satellite_data.R", the HMMs are fi
 
 The data, output and figures are not available in this repo while the work is under review for publication. The dataset used in the analysis will be available at the following URL <10.5281/zenodo.5575189> upon publication.
 
-remotes::install_github("inbo/inborutils")
-inborutils:::download_zenodo(doi="10.5281/zenodo.5575189", 
-                              path = ".", 
-                              parallel = FALSE, 
-                              quiet = FALSE)
-
 Please contact Theoni Photopoulou at <theoni.photopoulou@gmail.com> with any questions about the code and the data format.
 
 Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
