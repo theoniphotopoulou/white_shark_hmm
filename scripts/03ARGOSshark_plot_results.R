@@ -617,8 +617,9 @@ adF_withLeg <- ggplot(adF) +
   xlim(0,xmax) +
   xlab("Day of the year") + 
   ylab("Stationary state probability") + 
-  theme_bw(base_size = 20) + 
+  theme_bw(base_size = 15) + 
   theme(legend.position = "bottom",
+        legend.justification = c(0.5,0.99),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
 
@@ -832,11 +833,11 @@ juvM_plot <- ggplot(juvM) +
 
 # create maturity labels
 Ad_lab <- ggdraw() + draw_label("Adult", x = 0.4, y = 0.45, angle = -90,
-                                  vjust = 1, hjust = 1, size = 25); Ad_lab
+                                  vjust = 6, hjust = 1.5, size = 15); Ad_lab
 Subad_lab <- ggdraw() + draw_label("Subadult", x = 0.4, y = 0.37, angle = -90,
-                                  vjust = 1, hjust = 1, size = 25); Subad_lab
+                                  vjust = 6, hjust = 1.2, size = 15); Subad_lab
 Juv_lab <- ggdraw() + draw_label("Juvenile", x = 0.4, y = 0.39, angle = -90,
-                                   vjust = 1, hjust = 1, size = 25); Juv_lab
+                                   vjust = 6, hjust = 1.2, size = 15); Juv_lab
 
 # create common x and y labels
 y.lab <- textGrob("Stationary state probabilities", 
@@ -844,14 +845,14 @@ y.lab <- textGrob("Stationary state probabilities",
                   gp=gpar(fontsize=18), rot=90)
 
 x.lab <- textGrob("Day of the year", 
-                  vjust = -8, hjust = 0.7,
+                  vjust = -8, hjust = 0.9,
                   gp=gpar(fontsize=18))
 
 # create title plots
 Title_plotF <- ggdraw() + draw_text("Females", x = 0.85, y = 0.3,
-                                    vjust = 1, hjust = 1, size = 25); Title_plotF
+                                    vjust = 2.3, hjust = 1.3, size = 15); Title_plotF
 Title_plotM <- ggdraw() + draw_text("Males", x = 0.8, y = 0.3,
-                                    vjust = 1, hjust = 1, size = 25); Title_plotM
+                                    vjust = 2.3, hjust = 1.3, size = 15); Title_plotM
 
 # add labels to plot
 lay <- rbind(c(1,1,1,2,2,2,3,3),
@@ -942,8 +943,9 @@ sumF_withLeg <- ggplot(sumF) +
   ylim(0,ymax) + xlim(xxmin,xmax) +
   xlab("Length (cm)") + 
   ylab("Stationary state probability") + 
-  theme_bw(base_size = 20) + 
+  theme_bw(base_size = 15) + 
   theme(legend.position = "bottom",
+        legend.justification = c(0.55,1),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
 
@@ -971,7 +973,7 @@ sumF_plot <- ggplot(sumF) +
                     labels=c("Resident","Transient")) +
   ylim(0,ymax) + xlim(xxmin,xmax) +
   xlab("") + ylab("") + 
-  theme_bw(base_size = 20) + 
+  theme_bw(base_size = 15) + 
   theme(legend.position = "none",
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
@@ -995,7 +997,7 @@ sumM_plot <- ggplot(sumM) +
                     labels=c("Resident","Transient")) +
   ylim(0,ymax) + xlim(xxmin,xmax) +
   xlab("") + ylab("") + 
-  theme_bw(base_size = 20) + 
+  theme_bw(base_size = 15) + 
   theme(legend.position = "none",
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
@@ -1018,7 +1020,7 @@ winF_plot <- ggplot(winF) +
                     labels=c("Resident","Transient")) +
   ylim(0,1) + xlim(225,510) +
   xlab("") + ylab("") + 
-  theme_bw(base_size = 20) + 
+  theme_bw(base_size = 15) + 
   theme(legend.position = "none",
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
@@ -1041,20 +1043,20 @@ winM_plot <- ggplot(winM) +
                     labels=c("Resident","Transient")) +
   ylim(0,1) + xlim(225,510) +
   xlab("") + ylab("") + 
-  theme_bw(base_size = 20) + 
+  theme_bw(base_size = 15) + 
   theme(legend.position = "none",
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
 
 # create season labels
-Sum_lab <- ggdraw() + draw_label("Summer", x = 0.4, y = 0.4, angle = -90,
-                                 vjust = 1, hjust = 1, size = 25); Sum_lab
-Win_lab <- ggdraw() + draw_label("Winter", x = 0.4, y = 0.4, angle = -90,
-                                 vjust = 1, hjust = 1, size = 25); Win_lab
+Sum_lab <- ggdraw() + draw_label("Summer", x = 0.4, y = 0.45, angle = -90,
+                                 vjust = 4, hjust = 1, size = 15); Sum_lab
+Win_lab <- ggdraw() + draw_label("Winter", x = 0.4, y = 0.5, angle = -90,
+                                 vjust = 4, hjust = 1, size = 15); Win_lab
 
 # create common x and y labels
 y.lab <- textGrob("Stationary state probabilities", 
-                  vjust = 1, hjust = 0.4,
+                  vjust = 1.5, hjust = 0.4,
                   gp=gpar(fontsize=18), rot=90)
 
 x.lab <- textGrob("Length (cm)", 
@@ -1062,10 +1064,10 @@ x.lab <- textGrob("Length (cm)",
                   gp=gpar(fontsize=18))
 
 # create title plots
-Title_plotSum <- ggdraw() + draw_text("Females", x = 0.7, y = 0.3,
-                                      vjust = 1, hjust = 1, size = 25); Title_plotSum
-Title_plotWin <- ggdraw() + draw_text("Males", x = 0.7, y = 0.3,
-                                      vjust = 1, hjust = 1, size = 25); Title_plotWin
+Title_plotSum <- ggdraw() + draw_text("Females", x = 0.65, y = 0.3,
+                                      vjust = 3.2, hjust = 1, size = 15); Title_plotSum
+Title_plotWin <- ggdraw() + draw_text("Males", x = 0.65, y = 0.3,
+                                      vjust = 3.2, hjust = 1, size = 15); Title_plotWin
 
 # add labels to plot
 lay <- rbind(c(1,1,1,2,2,2,3),
@@ -1081,7 +1083,7 @@ TL_comp_plot <- grid.arrange(Title_plotSum, Title_plotWin, nullGrob(),
                              Leg_plot, nullGrob(),
                              layout_matrix=lay)
 
-quartz()
+#quartz()
 TL_comp_plotL <- grid.arrange(arrangeGrob(TL_comp_plot, left = y.lab, bottom = x.lab))                         
 
 ggsave(filename=here::here("figures","sex_vs_length_stationary.jpg"), 

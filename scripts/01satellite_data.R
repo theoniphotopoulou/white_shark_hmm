@@ -80,7 +80,7 @@ qual <- factor(tracks$quality, levels=c("B","A","0","1","2","3"))
 head(qual)
 tracks$quality <- qual
 table(tracks$quality)
-tracks <- droplevels(tr)
+tracks <- droplevels(tracks)
 table(tracks$quality)
 
 # Order the data by shark ID and Date and check
@@ -320,18 +320,40 @@ nloc_df <- ftdf %>%
   group_by(SPOT) %>% 
   tally() %>% print(n=Inf)
 
-# What is the mean time in days between locations? 
+# What is the mean time in days between locations across all tracks? 
 ftdf %>% dplyr::select(timediff) %>% 
   summarise(min_timediff = min(., na.rm=TRUE),
             max_timediff = max(., na.rm=TRUE))
-mean(ftdf$timediff, na.rm=TRUE)*24 # timediff is is days
+mean(ftdf$timediff, na.rm=TRUE)*24 # timediff is in days, to get hours multiply by 24
 sd(ftdf$timediff, na.rm=TRUE)*24
 
+# What is the mean time in days between locations within triptag? 
+# (i.e., without the big time gaps that separate trips)
+triploc_timediff <- ftdf %>% group_by(triptag) %>% 
+  summarise(min_timediff = min(timediff, na.rm=TRUE),
+            max_timediff = max(timediff, na.rm=TRUE),
+            mean_timediff = mean(timediff, na.rm=TRUE),
+            sd_timediff = sd(timediff, na.rm=TRUE))
+mean(triploc_timediff$mean_timediff, na.rm=TRUE)*24 # timediff is in days, to get hours multiply by 24
+sd(triploc_timediff$mean_timediff, na.rm=TRUE)*24 # timediff is in days, to get hours multiply by 24
+hist(triploc_timediff$mean_timediff*24)
+
 # What is the duration in days per track segment?
-tripdurdf <- ftdf %>% group_by(triptag) %>% 
-  summarise(tripdur = sum(timediff, na.rm=T)) # days
+# What is the average number of locations per day within trip?
+tripdurdf <- ftdf %>% group_by(triptag, n) %>% 
+  summarise(tripdur = sum(timediff, na.rm=T)) %>% # in days
+  mutate(loc_per_day = n/tripdur) # number of locations per day within trip
 tripdurdf %>% print(n=Inf)
 summary(tripdurdf$tripdur)
+summary(tripdurdf$loc_per_day)
+sd(tripdurdf$loc_per_day)
+
+# What is the distribution of time of day for locations within trip?
+loc_tod <- ftdf %>% group_by(triptag) %>%
+  mutate(tod = hour(date))
+head(loc_tod$tod)
+summary(loc_tod$tod)
+hist(loc_tod$tod, breaks=30)
 
 # What is the duration in days for each individual's cumulative track?
 trackdurdf <- ftdf %>% group_by(SPOT) %>% 

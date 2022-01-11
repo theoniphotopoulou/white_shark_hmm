@@ -637,36 +637,69 @@ ggsave(filename=here::here("figures","step_dep_densities.jpg"),
 # ~~~~~~~~~~~~~~~~ Tracks faceted by sex and state ~~~~~~~~~~~~~~~~
 ###################################################################
 
+sex_names <- c(`M`="Male", `F`="Female")
+sex_cols <- viridis(n=2, begin=0.05, end=0.65, alpha=alpha.trans)
+
+country_df <- data.frame(x=c(0.5,0.5),
+                         y=c(0.1,0.9),
+                         label=c("Nam","Bot"))
+
 # Tracks faceted by sex (rows) and state (columns)
-quartz()
+#quartz()
 wsm6a_state_map_bysexstate <- wsm6a_preds_sf %>% 
   ggplot() + 
   geom_sf(data=safr_countries) +
   geom_sf(aes(colour = wsm6a_vit), size=pointsize) + 
+  annotate("text", label="SA", x=-450000, y=300000, size=3.5) +
+  annotate("text", label="NA", x=-1100000, y=1300000, size=3.5) +
+  annotate("text", label="BW", x=-370000, y=1200000, size=3.5) +
+  annotate("text", label="ZW", x=200000, y=1600000, size=3.5) +
+  annotate("text", label="MZ", x=1130000, y=2150000, size=3.5) +
+  annotate("text", label="MG", x=2020000, y=1550000, size=3.5) +
   theme_bw(base_size=base_size) +
   scale_colour_viridis_d(name="State", begin=0.05, end=0.65,
-                         labels=stateNames, alpha=alpha.trans) +
-  theme(strip.background = element_rect(colour=NA, fill=NA), strip.text.x = element_text(size = 15)) +
+                         labels=stateNames, alpha=alpha.trans, 
+                         aesthetics = c("colour"), guide = "legend") +
+  theme(strip.background = element_rect(colour=NA, fill=NA), 
+        strip.text.x = element_text(size = 15)) +
   facet_wrap(~ sex + wsm6a_vit) + 
   theme(legend.position = "none", 
+        axis.title = element_blank(),
         strip.text.x = element_blank(),
         strip.background = element_blank()); wsm6a_state_map_bysexstate
 
+# With legend
+wsm6a_state_map_bysexstate_withLeg <- wsm6a_preds_sf %>% 
+  ggplot() + 
+  geom_point(aes(x, y, colour = wsm6a_vit), size=base_size/3, pch=19) + 
+  theme_bw(base_size=15) +
+  scale_color_manual(values=sex_cols, name="State", labels=stateNames) +
+  scale_shape_manual(values = c("Resident"=16, "Transient"=16)) +
+  theme(legend.position = "bottom",
+        legend.justification = c(0.45,-0.3),
+        strip.background = element_rect(colour=NA, fill=NA), 
+        strip.text.x = element_text(size = base_size)) +
+  facet_wrap(~ sex, labeller = as_labeller(sex_names))  
+# Legend plot
+Leg <- cowplot::get_legend(wsm6a_state_map_bysexstate_withLeg)
+SexLeg_plot <- ggdraw(Leg) 
+
 # create sex labels
-F_lab <- cowplot::ggdraw() + cowplot::draw_label("Females", x = 0, y = 0.6, angle = 0,
-                                 vjust = 0, hjust = 0, size = 25); F_lab
-M_lab <- cowplot::ggdraw() + cowplot::draw_label("Males", x = 0, y = 0.6, angle = 0,
-                                 vjust = 0, hjust = 0, size = 25); M_lab
+F_lab <- cowplot::ggdraw() + cowplot::draw_label("Females", x = -0.45, y = 0.7, angle = -90,
+                                 vjust = 0, hjust = 0, size = 15); F_lab
+M_lab <- cowplot::ggdraw() + cowplot::draw_label("Males", x = -0.45, y = 0.8, angle = -90,
+                                 vjust = 0, hjust = 0, size = 15); M_lab
 
 # create common x and y labels
 x.lab <- textGrob("Longitude", vjust = 0, hjust = 1,
                   gp=gpar(fontsize=18))
 
-y.lab <- textGrob("Latitude", vjust = 1, hjust = 0,
+y.lab <- textGrob("Latitude", vjust = 4, hjust = 0.5,
                   gp=gpar(fontsize=18), rot=90)
 
 # add labels to plot
-lay <- rbind(c(1,1,1,1,1,1,1,2),
+lay <- rbind(c(2,2,2,2,2,2,2,2),
+             c(1,1,1,1,1,1,1,3),
              c(1,1,1,1,1,1,1,3),
              c(1,1,1,1,1,1,1,3),
              c(1,1,1,1,1,1,1,3),
@@ -733,12 +766,17 @@ wsm6a_stateprobs_bymaturity_map <- wsm6a_preds_sf %>%
   ggplot() + theme_bw() +
   xlab("Longitude") + ylab("Latitude") +
   geom_sf(data=safr_countries) +
+  annotate("text", label="SA", x=-450000, y=300000, size=3.2) +
+  annotate("text", label="NA", x=-1100000, y=1300000, size=3.2) +
+  annotate("text", label="BW", x=-370000, y=1200000, size=3.2) +
+  annotate("text", label="ZW", x=200000, y=1600000, size=3.2) +
+  annotate("text", label="MZ", x=1130000, y=2150000, size=3.2) +
+  annotate("text", label="MG", x=2020000, y=1550000, size=3.2) +
   geom_sf(aes(colour = wsm6a_Ptrans), alpha=alpha.trans+0.1, size=pointsize) + 
   scale_colour_viridis_c(name="P(Transient)", limits=c(0,1),
                          begin = 0, end = 0.94) +
   facet_wrap(sex ~ maturity) +
   theme(strip.background = element_rect(colour=NA, fill=NA), 
-        #strip.text.x = element_text(size = 15),
         strip.text.x = element_blank(),
         axis.text = element_text(size=10),
         legend.position = "none",
@@ -752,14 +790,14 @@ wsm6a_stateprobs_bymaturity_map <- wsm6a_preds_sf %>%
 wsm6a_stateprobs_bymaturity_map_LEG <- wsm6a_preds_sf %>% 
   ggplot() + 
   geom_sf(data=safr_countries) +
-  #geom_sf(aes(colour=id), show.legend=FALSE)
   geom_sf(aes(colour = wsm6a_Ptrans), alpha=alpha.trans*2, size=pointsize) + 
-  theme_bw(base_size=15) +
+  theme_bw(base_size=11) +
   scale_colour_viridis_c(name="P(Transient)", limits=c(0,1),
                          begin = 0, end = 0.94) +
   theme(strip.background = element_rect(colour=NA, fill=NA), 
-        strip.text.x = element_text(size = 15),
-        legend.position = c(0.01,0.2)) +
+        strip.text.x = element_text(size = 2),
+        legend.position = "top",
+        legend.justification = c(0.15,10)) +
   facet_wrap(sex ~ maturity); wsm6a_stateprobs_bymaturity_map_LEG 
 
 #' Get point legend
@@ -767,31 +805,32 @@ pTransLeg <- cowplot::get_legend(wsm6a_stateprobs_bymaturity_map_LEG)
 pTransLeg_plot <- ggdraw(pTransLeg) 
 
 # create sex labels
-F_lab <- ggdraw() + draw_label("Females", x = 0.15, y = 0.3, angle = 0,
-                               vjust = 0, hjust = 0, size = 20); F_lab
-M_lab <- ggdraw() + draw_label("Males", x = 0.15, y = 0.5, angle = 0,
-                               vjust = 0, hjust = 0, size = 20); M_lab
+F_lab <- ggdraw() + draw_label("Females", x = 0.15, y = 0.55, angle = -90,
+                               vjust = 1.4, hjust = 0, size = 12); F_lab
+M_lab <- ggdraw() + draw_label("Males", x = 0.15, y = 0.65, angle = -90,
+                               vjust = 1.4, hjust = 0, size = 12); M_lab
 
 #' create title plots
-Title_plotJuv <- ggdraw() + draw_text("Juvenile", x = 0.95, y = 0.49, 
-                                      vjust = 1, hjust = 1, size = 20); Title_plotJuv
-Title_plotSubad <- ggdraw() + draw_text("Subadult", x = 0.88, y = 0.49,
-                                      vjust = 1, hjust = 1, size = 20); Title_plotSubad
-Title_plotAd <- ggdraw() + draw_text("Adult", x = 0.7, y = 0.49,
-                                      vjust = 1, hjust = 1, size = 20); Title_plotAd
+Title_plotJuv <- ggdraw() + draw_text("Juvenile", x = 0.85, y = 0.8, 
+                                      vjust = 1, hjust = 1, size = 12); Title_plotJuv
+Title_plotSubad <- ggdraw() + draw_text("Subadult", x = 0.84, y = 0.8,
+                                      vjust = 1, hjust = 1, size = 12); Title_plotSubad
+Title_plotAd <- ggdraw() + draw_text("Adult", x = 0.7, y = 0.8,
+                                      vjust = 1, hjust = 1, size = 12); Title_plotAd
 
-lay <- rbind(c(1,1,1,2,2,2,3,3,3,4,4,8),
-             c(rep(5,times=9),4,4,8),
-             c(rep(5,times=9),4,4,8),
-             c(rep(5,times=9),6,6,8),
-             c(rep(5,times=9),6,6,8),
-             c(rep(5,times=9),6,6,8),
-             c(rep(5,times=9),7,7,9),
-             c(rep(5,times=9),7,7,9))
+lay <- rbind(c(1,1,1,2,2,2,3,3,3,4,4,4),
+             c(rep(5,times=9),4,4,4),
+             c(rep(5,times=9),4,4,4),
+             c(rep(5,times=9),6,6,6),
+             c(rep(5,times=9),6,6,6),
+             c(rep(5,times=9),6,6,6),
+             c(rep(5,times=9),7,7,7),
+             c(rep(5,times=9),7,7,7),
+             c(rep(8,times=12)))
 
 map_grid_pTrans_comp_plot <- grid.arrange(Title_plotJuv, Title_plotSubad, Title_plotAd, F_lab, 
                                           wsm6a_stateprobs_bymaturity_map, M_lab, nullGrob(),
-                                          pTransLeg, nullGrob(), layout_matrix=lay)
+                                          pTransLeg, layout_matrix=lay)
 
 ggsave(filename=here::here("figures","pTrans_by_sex_and_maturity.jpg"), 
        plot=map_grid_pTrans_comp_plot,
