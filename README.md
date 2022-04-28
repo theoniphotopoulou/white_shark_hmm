@@ -5,7 +5,7 @@ This repository contains the functions and scripts used for analysing white shar
 
 The data are read in and cleaned in script "01satellite_data.R", the HMMs are fitted in script "02momentuHMM_models.R" and the plots are produced in script "03ARGOSshark_plot_results.R".
 
-The data, output and figures are not available in this repo while the work is under review for publication. The dataset used in the analysis will be available at the following URL <10.5281/zenodo.5575189> upon publication.
+The data, output and figures are not available in this repo while the work is under review for publication. The dataset used in the analysis will be available at the following URL <https://zenodo.org/record/5575189> upon publication.
 
 Please contact Theoni Photopoulou at <theoni.photopoulou@gmail.com> with any questions about the code and the data format.
 
